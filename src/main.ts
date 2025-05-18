@@ -89,18 +89,6 @@ function getBangredirectUrl() {
       referrer: document.referrer,
       timestamp: new Date().toISOString(),
   });
-  console.log({
-    original_query: query,
-    bang_candidate: bangCandidate,
-    selected_bang: selectedBang?.t,
-    selected_bang_url: selectedBang?.u,
-    clean_query: cleanQuery,
-    redirect_url: searchUrl,
-    user_agent: navigator.userAgent,
-    referrer: document.referrer,
-    timestamp: new Date().toISOString(),
-})
-
   return searchUrl;
 }
 
