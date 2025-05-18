@@ -1,11 +1,14 @@
 import { bangs } from "./bang";
 import "./global.css";
 
-import { PostHog } from "posthog-node";
+import posthog from 'posthog-js'
 
-const client = new PostHog("phc_XcplcYY1wslNAuiWHmLtS45O6yc40zrQn5tdhQFum8Z", {
-  host: "https://eu.i.posthog.com",
-});
+posthog.init('phc_XcplcYY1wslNAuiWHmLtS45O6yc40zrQn5tdhQFum8Z',
+    {
+        api_host: 'https://eu.i.posthog.com',
+        person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
+    }
+)
 
 function noSearchDefaultPageRender() {
   const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -75,11 +78,7 @@ function getBangredirectUrl() {
     encodeURIComponent(cleanQuery).replace(/%2F/g, "/"),
   );
   if (!searchUrl) return null;
-  const uuid = crypto.randomUUID();
-  client.capture({
-    distinctId: uuid,
-    event: "search_redirect",
-    properties: {
+  posthog.capture("search_redirect",{
       original_query: query,
       bang_candidate: bangCandidate,
       selected_bang: selectedBang?.t,
@@ -89,7 +88,6 @@ function getBangredirectUrl() {
       user_agent: navigator.userAgent,
       referrer: document.referrer,
       timestamp: new Date().toISOString(),
-    },
   });
 
   return searchUrl;
