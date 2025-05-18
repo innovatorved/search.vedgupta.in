@@ -1,13 +1,15 @@
-import { bangs } from "./bang";
+import {bangs} from "./bang";
 import "./global.css";
 
 import posthog from 'posthog-js'
 
 posthog.init('phc_XcplcYY1wslNAuiWHmLtS45O6yc40zrQn5tdhQFum8Z',
-    {
-        api_host: 'https://eu.i.posthog.com',
-        person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
-    }
+  {
+    api_host: 'https://eu.i.posthog.com',
+    person_profiles: 'identified_only',
+    capture_pageview: false,
+    capture_pageleave: false
+  }
 )
 
 function noSearchDefaultPageRender() {
@@ -78,16 +80,16 @@ function getBangredirectUrl() {
     encodeURIComponent(cleanQuery).replace(/%2F/g, "/"),
   );
   if (!searchUrl) return null;
-  posthog.capture("search_redirect",{
-      original_query: query,
-      bang_candidate: bangCandidate,
-      selected_bang: selectedBang?.t,
-      selected_bang_url: selectedBang?.u,
-      clean_query: cleanQuery,
-      redirect_url: searchUrl,
-      user_agent: navigator.userAgent,
-      referrer: document.referrer,
-      timestamp: new Date().toISOString(),
+  posthog.capture("search_redirect", {
+    original_query: query,
+    bang_candidate: bangCandidate,
+    selected_bang: selectedBang?.t,
+    selected_bang_url: selectedBang?.u,
+    clean_query: cleanQuery,
+    redirect_url: searchUrl,
+    user_agent: navigator.userAgent,
+    referrer: document.referrer,
+    timestamp: new Date().toISOString(),
   });
   return searchUrl;
 }
