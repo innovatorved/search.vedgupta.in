@@ -1,6 +1,12 @@
 import { bangs } from "./bang";
 import "./global.css";
 
+import { PostHog } from "posthog-node";
+
+const client = new PostHog("phc_XcplcYY1wslNAuiWHmLtS45O6yc40zrQn5tdhQFum8Z", {
+  host: "https://eu.i.posthog.com",
+});
+
 function noSearchDefaultPageRender() {
   const app = document.querySelector<HTMLDivElement>("#app")!;
   app.innerHTML = `
@@ -69,6 +75,22 @@ function getBangredirectUrl() {
     encodeURIComponent(cleanQuery).replace(/%2F/g, "/"),
   );
   if (!searchUrl) return null;
+  const uuid = crypto.randomUUID();
+  client.capture({
+    distinctId: uuid,
+    event: "search_redirect",
+    properties: {
+      original_query: query,
+      bang_candidate: bangCandidate,
+      selected_bang: selectedBang?.t,
+      selected_bang_url: selectedBang?.u,
+      clean_query: cleanQuery,
+      redirect_url: searchUrl,
+      user_agent: navigator.userAgent,
+      referrer: document.referrer,
+      timestamp: new Date().toISOString(),
+    },
+  });
 
   return searchUrl;
 }

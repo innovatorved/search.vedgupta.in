@@ -13,6 +13,8 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "posthog-js": "^1.242.2",
+    "posthog-node": "^4.17.1",
     "vite-plugin-pwa": "^0.21.2"
   }
 }
